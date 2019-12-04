@@ -39,7 +39,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
     // timer
 
-    let deadline = '2019-12-02';
+    let deadline = '2019-12-05';
 
     function getTimeRemaining(endTime) {
                let t = Date.parse(endTime) - Date.parse(new Date()),
@@ -64,9 +64,36 @@ window.addEventListener("DOMContentLoaded", function () {
 
         function updateClock() {
             let t = getTimeRemaining(endtime);
-            hours.textContent = t.hours;
-            minutes.textContent = t.minutes;
-            seconds.textContent = t.seconds;
+
+
+            if (t.hours<0&&t.minutes<0&&t.seconds<0){
+                hours.textContent = "00";
+                minutes.textContent = "00";
+                seconds.textContent = "00";
+            }
+            else {
+                if (t.hours<10){
+                    hours.textContent = "0"+t.hours;
+                }
+                else{
+                    hours.textContent = t.hours;
+                }
+
+                if (t.minutes<10){
+                    minutes.textContent = "0"+t.minutes;
+                }
+                else{
+                    minutes.textContent = t.minutes;
+                }
+
+                if (t.seconds<10){
+                    seconds.textContent = "0"+t.seconds;
+                }
+                else{
+                    seconds.textContent = t.seconds;
+                }
+            }
+
 
             if (t.total<=0){
                 clearInterval(timerInterval);
@@ -91,6 +118,37 @@ window.addEventListener("DOMContentLoaded", function () {
     close.addEventListener('click',function () {
         overlay.style.display = 'none';
         more.classList.remove('more-splash');
-        ocument.body.style.overflow='';
+        document.body.style.overflow='';
     });
 });
+
+class Options {
+    constructor(height, width, bg, fontSize, textAlign,text,elementClass,tag){
+        this.height = height;
+        this.width = width;
+        this.bg = bg;
+        this.fontSize = fontSize;
+        this.textAlign = textAlign;
+        this.text = text;
+        this.elementClass = elementClass;
+        this.tag = tag;
+    }
+    createDiv(){
+
+        let newElement = document.querySelector('.'+this.elementClass);
+        console.log(newElement);
+        let div = document.createElement(this.tag);
+        div.style.height=this.height+'px';
+        div.style.width=this.width+'px';
+        div.style.background=this.bg;
+        div.style.fontSize=this.fontSize+'px';
+        div.style.textAlign=this.textAlign;
+        newElement.appendChild(div);
+        div.textContent = this.text;
+    }
+}
+
+let blackDiv = new Options(50,100,'lime',25,'center',"Новый тексат",'main-block-title',"p");
+let button = new Options(50,100,'lime',25,'center',"Новый тексат",'main-block-link',"button");
+blackDiv.createDiv();
+button.createDiv();
