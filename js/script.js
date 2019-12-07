@@ -120,35 +120,77 @@ window.addEventListener("DOMContentLoaded", function () {
         more.classList.remove('more-splash');
         document.body.style.overflow='';
     });
+
+    let message = {
+        loading: 'Загрузка...',
+        success: 'Спасибо! Скоро мы с Вами свяжемся',
+        failure: 'Что то пошло не так...'
+    };
+
+    let form = document.querySelector(".main-form"),
+        input = form.getElementsByTagName('input'),
+        statusMessage = document.createElement('div');
+
+    statusMessage.classList.add('status');
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        form.appendChild(statusMessage);
+
+        let request = new XMLHttpRequest();
+        request.open('POST','server.php');
+        request.setRequestHeader('Content-type','application/x-wwww-form-unlencoded');
+
+        let formData = new FormData(form);
+        request.send(formData);
+
+
+        request.addEventListener('readystatechange', function () {
+            if (request.readyState < 4){
+                statusMessage.innerHTML = message.loading;
+            }
+            else if (request.ready === 4 && request.status == 200){
+                statusMessage.innerHTML = message.success;
+            }else{
+                statusMessage.innerHTML = message.failure;
+            }
+        });
+
+        for (let i=0;i<input.length;i++){
+            input[i].value = '';
+        }
+    });
 });
 
-class Options {
-    constructor(height, width, bg, fontSize, textAlign,text,elementClass,tag){
-        this.height = height;
-        this.width = width;
-        this.bg = bg;
-        this.fontSize = fontSize;
-        this.textAlign = textAlign;
-        this.text = text;
-        this.elementClass = elementClass;
-        this.tag = tag;
-    }
-    createDiv(){
+// class Options {
+//     constructor(height, width, bg, fontSize, textAlign,text,elementClass,tag){
+//         this.height = height;
+//         this.width = width;
+//         this.bg = bg;
+//         this.fontSize = fontSize;
+//         this.textAlign = textAlign;
+//         this.text = text;
+//         this.elementClass = elementClass;
+//         this.tag = tag;
+//     }
+//     createDiv(){
+//
+//         let newElement = document.querySelector('.'+this.elementClass);
+//         console.log(newElement);
+//         let div = document.createElement(this.tag);
+//         div.style.height=this.height+'px';
+//         div.style.width=this.width+'px';
+//         div.style.background=this.bg;
+//         div.style.fontSize=this.fontSize+'px';
+//         div.style.textAlign=this.textAlign;
+//         newElement.appendChild(div);
+//         div.textContent = this.text;
+//     }
+// }
+//
+// let blackDiv = new Options(50,100,'lime',25,'center',"Новый тексат",'main-block-title',"p");
+// let button = new Options(50,100,'lime',25,'center',"Новый тексат",'main-block-link',"button");
+// blackDiv.createDiv();
+// button.createDiv();
 
-        let newElement = document.querySelector('.'+this.elementClass);
-        console.log(newElement);
-        let div = document.createElement(this.tag);
-        div.style.height=this.height+'px';
-        div.style.width=this.width+'px';
-        div.style.background=this.bg;
-        div.style.fontSize=this.fontSize+'px';
-        div.style.textAlign=this.textAlign;
-        newElement.appendChild(div);
-        div.textContent = this.text;
-    }
-}
 
-let blackDiv = new Options(50,100,'lime',25,'center',"Новый тексат",'main-block-title',"p");
-let button = new Options(50,100,'lime',25,'center',"Новый тексат",'main-block-link',"button");
-blackDiv.createDiv();
-button.createDiv();
